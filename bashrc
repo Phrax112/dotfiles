@@ -71,3 +71,47 @@ function dra() {
 function dls() {
     docker container ps -a
 }
+
+git_custom_commit() {
+    ticket=$(git rev-parse --abrev-ref HEAD | grep -Eo '^(\w+/)?(\w_[-_])?[0-9]' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")
+    if [[ $ticket == "" ]]; then
+        echo "Ticket blank?"
+        return 1
+    fi
+    cmd="git commit -m \"$ticket $1\""
+    echo $cmd
+    eval $cmd
+}
+
+git_custom_push() {
+    branch=$(git rev-parse --abrev-ref HEAD 2>/dev/null)
+    if [[ $branch == "" ]]; then
+        echo "Can't find branch?"
+        return 1;
+    fi
+    cmd="git push -u origin $branch"
+    echo $cmd
+    eval $cmd
+}
+
+find_dotfile_diffs() {
+    for f in $(ls | grep -v README); do
+        diff -rq "$f" "$HOME/.${f}" | grep -v "^Only in*" | awk '{print $2}';
+    done
+}
+
+sync_dotfiles() {
+    cd ~/dotfiles
+    git checkout -q master
+    git pull -q
+    diff_files=$(find_dotfile_diffs)
+    for f in $diff_files; do
+        echo "Syncing ${f} from dotfiles repo"
+        cp -r "$f" "$HOME/.${f}"
+    done
+}
+
+#sync_hosts="phrax phrax.host"
+#if [[ $sync_hosts =~ (^|[[:space:]])"$HOSTNAME"($|[[:space:]]) ]]; then
+#    sync_dotfiles
+#fi
