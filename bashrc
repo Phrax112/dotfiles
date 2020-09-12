@@ -91,7 +91,7 @@ git_custom_commit() {
 }
 
 git_custom_push() {
-    branch=$(git rev-parse --abrev-ref HEAD 2>/dev/null)
+    branch=$(git branch --show-current 2>/dev/null)
     if [[ $branch == "" ]]; then
         echo "Can't find branch?"
         return 1;
