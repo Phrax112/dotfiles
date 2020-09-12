@@ -68,6 +68,10 @@ function dra() {
     done
 }
 
+function dlog() {
+    docker logs $1
+    }
+
 function dls() {
     docker container ps -a
 }
@@ -101,7 +105,7 @@ find_dotfile_diffs() {
 }
 
 sync_dotfiles() {
-    cd ~/dotfiles
+    cd ~/workspace/dotfiles
     git checkout -q master
     git pull -q
     diff_files=$(find_dotfile_diffs)
