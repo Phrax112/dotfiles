@@ -28,6 +28,8 @@ alias wk="cd ~/workspace"
 alias k="rlwrap k"
 alias vpn='protonvpn'
 alias g="cd /home/gmoy/go/src"
+alias gitc="git_custom_commit"
+alias gitp="git_custom_push"
 
 #####################################################################
 # Environmental variables
@@ -77,12 +79,13 @@ function dls() {
 }
 
 git_custom_commit() {
-    ticket=$(git rev-parse --abrev-ref HEAD | grep -Eo '^(\w+/)?(\w_[-_])?[0-9]' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")
-    if [[ $ticket == "" ]]; then
-        echo "Ticket blank?"
-        return 1
-    fi
-    cmd="git commit -m \"$ticket $1\""
+    #ticket=$(git rev-parse --abrev-ref HEAD | grep -Eo '^(\w+/)?(\w_[-_])?[0-9]' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")
+    #if [[ $ticket == "" ]]; then
+    #    echo "Ticket blank?"
+    #    return 1
+    #fi
+    #cmd="git commit -m \"$ticket $1\""
+    cmd="git commit -m \"$1\""
     echo $cmd
     eval $cmd
 }
