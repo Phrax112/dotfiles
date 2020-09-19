@@ -122,3 +122,7 @@ sync_dotfiles() {
 #if [[ $sync_hosts =~ (^|[[:space:]])"$HOSTNAME"($|[[:space:]]) ]]; then
 #    sync_dotfiles
 #fi
+
+if [[ -z "$TMUX" ]]; then
+    tmux
+fi
