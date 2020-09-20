@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # ~/.bashrc
 #
@@ -30,6 +32,10 @@ alias vpn='protonvpn'
 alias g="cd /home/gmoy/go/src"
 alias gitc="git_custom_commit"
 alias gitp="git_custom_push"
+alias gits="git status"
+alias gitco="git checkout"
+alias gitd="git_diff"
+alias air="/home/gmoy/go/src/github.com/cosmtrek/air/bin/air"
 
 #####################################################################
 # Environmental variables
@@ -49,13 +55,13 @@ HISTFILESIZE=100000000
 #####################################################################
 
 function alarmer() {
-    sleep $1
+    sleep "$1"
     cvlc --play-and-exit /home/gmoy/Downloads/service-bell_daniel_simion.mp3 
 }
 
 function alarm() {
     date
-    alarmer $1 >/dev/null 2&>1 &
+    alarmer "$1" >/dev/null 2>&1 &
     disown $!
 }
 
@@ -64,14 +70,14 @@ function dprune() {
 }
 
 function dra() {
-    for cntr in `docker container ps -a | awk '{print $1}' | tail -n +2`; do
-        docker container stop $cntr
-        docker container rm $cntr
+    for cntr in $(docker container ps -a | awk '{print $1}' | tail -n +2); do
+        docker container stop "$cntr"
+        docker container rm "$cntr"
     done
 }
 
 function dlog() {
-    docker logs $1
+    docker logs "$1"
     }
 
 function dls() {
@@ -86,8 +92,8 @@ git_custom_commit() {
     #fi
     #cmd="git commit -m \"$ticket $1\""
     cmd="git commit -m \"$1\""
-    echo $cmd
-    eval $cmd
+    echo "$cmd"
+    eval "$cmd"
 }
 
 git_custom_push() {
@@ -97,9 +103,22 @@ git_custom_push() {
         return 1;
     fi
     cmd="git push -u origin $branch"
-    echo $cmd
-    eval $cmd
+    echo "$cmd"
+    eval "$cmd"
 }
+
+git_diff() {
+    if [ "$#" -eq 0 ]; then
+        git diff --minimal
+    elif [ "$#" -eq 1 ]; then
+        git diff "$1"
+    elif [ "$#" -eq 2 ]; then
+        git diff "$1" -- "$2"
+    else
+        echo "wrong number of args?"
+    fi
+}
+
 
 find_dotfile_diffs() {
     for f in $(ls | grep -v README); do
@@ -108,7 +127,7 @@ find_dotfile_diffs() {
 }
 
 sync_dotfiles() {
-    cd ~/workspace/dotfiles
+    cd ~/workspace/dotfiles || exit
     git checkout -q master
     git pull -q
     diff_files=$(find_dotfile_diffs)
