@@ -137,11 +137,40 @@ sync_dotfiles() {
     done
 }
 
+tmux_chooser() {
+	no_of_terminals=$(tmux list-sessions 2>/dev/null | wc -l)
+	IFS=$'\n'
+	output=($(tmux list-sessions 2>/dev/null))
+	output_names=($(tmux list-sessions -F\#S 2>/dev/null))
+	if [[ $no_of_terminals -gt 0 ]]; then
+		k=1
+		echo "Choose the terminal to attach: "
+		for i in "${output[@]}"; do
+			echo "$k - $i"
+			((k++))
+		done
+	fi
+	echo
+	echo "Create a new session by entering a name for it"
+	read -r input
+	if [[ $input == "" ]]; then
+		tmux new-session
+	elif [[ $input == 'nil' ]]; then
+		exit 1
+	elif [[ $input =~ ^[0-9]+$ ]] && [[ $input -le $no_of_terminals ]]; then
+		terminal_name="${output_names[input - 1]}"
+		tmux attach -t "$terminal_name"
+	else
+		tmux new-session -s "$input"
+	fi
+	exit 0
+}
+
 #sync_hosts="phrax phrax.host"
 #if [[ $sync_hosts =~ (^|[[:space:]])"$HOSTNAME"($|[[:space:]]) ]]; then
 #    sync_dotfiles
 #fi
 
 if [[ -z "$TMUX" ]]; then
-    tmux
+    tmux_chooser
 fi
