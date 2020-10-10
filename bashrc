@@ -38,6 +38,7 @@ alias gitd="git_diff"
 alias air="/home/gmoy/go/src/github.com/cosmtrek/air/bin/air"
 alias q32="rlwrap /home/gmoy/q/l32/q"
 alias q="rlwrap /home/gmoy/q/l64/q"
+alias notes='printf "\n\n$(date)\n\n" >> /home/gmoy/.notes;vi "+normal G$" +startinsert /home/gmoy/.notes'
 
 #####################################################################
 # Environmental variables
