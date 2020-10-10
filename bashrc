@@ -158,8 +158,8 @@ tmux_chooser() {
 	read -r input
 	if [[ $input == "" ]]; then
 		tmux new-session
-	elif [[ $input == 'nil' ]]; then
-		exit 1
+	elif [[ $input == 'n' ]]; then
+		return 0
 	elif [[ $input =~ ^[0-9]+$ ]] && [[ $input -le $no_of_terminals ]]; then
 		terminal_name="${output_names[input - 1]}"
 		tmux attach -t "$terminal_name"
