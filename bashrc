@@ -169,6 +169,14 @@ tmux_chooser() {
 	exit 0
 }
 
+# cC p.c -ledit
+cC () {
+    cFile=$1
+    eFile=`basename $cFile .c`
+    cc -std=c99 -Wall $2 $cFile -o $eFile
+    echo "$cFile --> $eFile"
+}
+
 #sync_hosts="phrax phrax.host"
 #if [[ $sync_hosts =~ (^|[[:space:]])"$HOSTNAME"($|[[:space:]]) ]]; then
 #    sync_dotfiles
