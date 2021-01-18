@@ -38,7 +38,7 @@ alias gitd="git_diff"
 alias air="/home/gmoy/go/src/github.com/cosmtrek/air/bin/air"
 alias q32="rlwrap /home/gmoy/q/l32/q"
 alias q="rlwrap /home/gmoy/q/l64/q"
-alias notes='printf "\n\n$(date)\n\n" >> /home/gmoy/.notes;vi "+normal G$" +startinsert /home/gmoy/.notes'
+alias notes='printf "\n\n$(date)\n\n" >> /home/gmoy/.notes;vi "+Goyo" "+normal G$" +startinsert /home/gmoy/.notes'
 
 #####################################################################
 # Environmental variables
@@ -169,13 +169,10 @@ tmux_chooser() {
 	exit 0
 }
 
-# cC p.c -ledit
-cC () {
-    cFile=$1
-    eFile=`basename $cFile .c`
-    cc -std=c99 -Wall $2 $cFile -o $eFile
-    echo "$cFile --> $eFile"
-}
+if [[ 0 -eq $(protonvpn status | grep Status | grep Connected | wc -l) ]]; then
+    echo "Connecting to VPN..."
+    sudo protonvpn c -f    
+fi
 
 #sync_hosts="phrax phrax.host"
 #if [[ $sync_hosts =~ (^|[[:space:]])"$HOSTNAME"($|[[:space:]]) ]]; then
